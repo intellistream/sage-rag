@@ -1,16 +1,14 @@
 [build-system]
-requires = [
-    "setuptools>=64",
-    "wheel",
-]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "isage-rag"
-version = "0.1.0"
+dynamic = ["version"]
 description = "SAGE RAG - Document loading, chunking, retrieval, and RAG pipeline orchestration"
 readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "MIT"}
 authors = [
     { name = "IntelliStream Team", email = "shuhao_zhang@hust.edu.cn" },
 ]
@@ -28,6 +26,7 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -38,11 +37,9 @@ classifiers = [
     "Topic :: Text Processing :: Indexing",
 ]
 
-# Core dependencies
+# Core dependencies - only depend on SAGE interface layer
 dependencies = [
-    "numpy>=1.24.0",
-    "pydantic>=2.0.0",
-    "typing-extensions>=4.5.0",
+    "isage-libs>=0.2.0",  # SAGE interface layer (sage.libs.rag.interface)
 ]
 
 [project.optional-dependencies]
@@ -50,69 +47,44 @@ dependencies = [
 loaders = [
     "pypdf>=3.0.0",
     "python-docx>=1.0.0",
-    "markdown>=3.4.0",
-    "beautifulsoup4>=4.12.0",
 ]
 
 # Text chunking
 chunking = [
-    "sentence-transformers>=2.2.0",
     "tiktoken>=0.5.0",
-    "nltk>=3.8.0",
 ]
 
 # Retrieval (vector databases)
 retrieval = [
-    "isage-vdb>=0.1.0",  # SageVDB
-    "chromadb>=0.4.0",
-    "pymilvus>=2.3.0",
+    "isage-vdb>=0.1.0",
 ]
 
 # Reranking
 reranking = [
     "sentence-transformers>=2.2.0",
-    "torch>=2.0.0",
 ]
 
 # LLM generation
 generation = [
     "openai>=1.0.0",
-    "anthropic>=0.30.0",
-]
-
-# Evaluation
-evaluation = [
-    "rouge-score>=0.1.2",
-    "bert-score>=0.3.13",
 ]
 
 # Full installation
 all = [
     "pypdf>=3.0.0",
     "python-docx>=1.0.0",
-    "markdown>=3.4.0",
-    "beautifulsoup4>=4.12.0",
-    "sentence-transformers>=2.2.0",
     "tiktoken>=0.5.0",
-    "nltk>=3.8.0",
     "isage-vdb>=0.1.0",
-    "chromadb>=0.4.0",
-    "pymilvus>=2.3.0",
-    "torch>=2.0.0",
+    "sentence-transformers>=2.2.0",
     "openai>=1.0.0",
-    "anthropic>=0.30.0",
-    "rouge-score>=0.1.2",
-    "bert-score>=0.3.13",
 ]
 
 # Development dependencies
 dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
-    "pytest-asyncio>=0.21.0",
     "ruff>=0.8.4",
     "mypy>=1.5.0",
-    "pre-commit>=3.3.0",
 ]
 
 [project.urls]
@@ -127,6 +99,9 @@ where = ["src"]
 [tool.setuptools.package-data]
 "*" = ["py.typed"]
 
+[tool.setuptools.dynamic]
+version = {attr = "sage_rag._version.__version__"}
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
@@ -140,7 +115,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --cov=sage --cov-report=term-missing"
+addopts = "-v"
 
 [tool.mypy]
 python_version = "3.10"

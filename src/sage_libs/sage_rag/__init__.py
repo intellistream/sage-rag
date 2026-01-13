@@ -9,7 +9,7 @@ This package provides concrete implementations for:
 
 Usage:
     # Direct import
-    from sage_rag import TextLoader, SimpleRAGPipeline
+    from sage_libs.sage_rag import TextLoader, SimpleRAGPipeline
 
     # Or via SAGE factory (after import triggers registration)
     import sage_rag  # triggers auto-registration

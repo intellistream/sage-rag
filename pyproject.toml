@@ -1,124 +1,54 @@
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "isage-rag"
-dynamic = ["version"]
-description = "SAGE RAG - Document loading, chunking, retrieval, and RAG pipeline orchestration"
+version = "0.1.0.0"
+description = "SAGE RAG Framework - Document loaders, chunkers, retrievers for RAG pipelines"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
-    { name = "IntelliStream Team", email = "shuhao_zhang@hust.edu.cn" },
+    { name = "IntelliStream Team", email = "shuhao_zhang@hust.edu.cn" }
 ]
 keywords = [
-    "sage",
-    "rag",
-    "retrieval-augmented-generation",
-    "document-loading",
-    "text-chunking",
+    "RAG",
     "retrieval",
-    "reranking",
-    "intellistream",
-]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Text Processing :: Indexing",
+    "document-loader",
+    "chunker",
+    "retriever",
+    "LLM",
+    "AI",
 ]
 
-# Core dependencies - only depend on SAGE interface layer
 dependencies = [
-    "isage-libs>=0.2.0",  # SAGE interface layer (sage.libs.rag.interface)
+    "pydantic>=2.0.0",
+    "typing-extensions>=4.0.0",
 ]
 
 [project.optional-dependencies]
-# Document loading
-loaders = [
-    "pypdf>=3.0.0",
-    "python-docx>=1.0.0",
-]
-
-# Text chunking
-chunking = [
-    "tiktoken>=0.5.0",
-]
-
-# Retrieval (vector databases)
-retrieval = [
-    "isage-vdb>=0.1.0",
-]
-
-# Reranking
-reranking = [
-    "sentence-transformers>=2.2.0",
-]
-
-# LLM generation
-generation = [
-    "openai>=1.0.0",
-]
-
-# Full installation
-all = [
-    "pypdf>=3.0.0",
-    "python-docx>=1.0.0",
-    "tiktoken>=0.5.0",
-    "isage-vdb>=0.1.0",
-    "sentence-transformers>=2.2.0",
-    "openai>=1.0.0",
-]
-
-# Development dependencies
 dev = [
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "ruff>=0.8.4",
-    "mypy>=1.5.0",
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.4.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/intellistream/sage-rag"
-Repository = "https://github.com/intellistream/sage-rag"
-Documentation = "https://sage-docs.org"
-Issues = "https://github.com/intellistream/sage-rag/issues"
+"Homepage" = "https://github.com/intellistream/sage-rag"
+"Repository" = "https://github.com/intellistream/sage-rag"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["sage_libs*"]
 
-[tool.setuptools.package-data]
-"*" = ["py.typed"]
-
-[tool.setuptools.dynamic]
-version = {attr = "sage_rag._version.__version__"}
+[tool.setuptools.package-dir]
+"" = "src"
 
 [tool.ruff]
 line-length = 100
 target-version = "py310"
 
-[tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "PT"]
-ignore = ["E501"]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = "-v"
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
+asyncio_mode = "auto"

@@ -14,7 +14,7 @@ class SentenceChunker(TextChunker):
         overlap_sentences: Number of overlapping sentences between chunks.
 
     Example:
-        >>> from sage_rag import SentenceChunker
+        >>> from sage_libs.sage_rag import SentenceChunker
         >>> chunker = SentenceChunker(max_sentences=5)
         >>> chunks = chunker.chunk("Hello world. How are you?")
     """

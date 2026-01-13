@@ -14,7 +14,7 @@ class DenseRetriever(Retriever):
         top_k: Default number of results to return.
 
     Example:
-        >>> from sage_rag import DenseRetriever
+        >>> from sage_libs.sage_rag import DenseRetriever
         >>> retriever = DenseRetriever(embedding_model=model, vector_store=store)
         >>> results = retriever.retrieve("What is RAG?")
     """

@@ -14,7 +14,7 @@ class MarkdownLoader(DocumentLoader):
         include_metadata: Whether to extract YAML frontmatter.
 
     Example:
-        >>> from sage_rag import MarkdownLoader
+        >>> from sage_libs.sage_rag import MarkdownLoader
         >>> loader = MarkdownLoader()
         >>> doc = loader.load("README.md")
     """

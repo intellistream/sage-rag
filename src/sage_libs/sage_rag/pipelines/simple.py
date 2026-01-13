@@ -32,7 +32,7 @@ class SimpleRAGPipeline(RAGPipeline):
         generator: LLM for response generation.
 
     Example:
-        >>> from sage_rag import SimpleRAGPipeline, TextLoader, SentenceChunker, DenseRetriever
+        >>> from sage_libs.sage_rag import SimpleRAGPipeline, TextLoader, SentenceChunker, DenseRetriever
         >>> pipeline = SimpleRAGPipeline(
         ...     loader=TextLoader(),
         ...     chunker=SentenceChunker(),

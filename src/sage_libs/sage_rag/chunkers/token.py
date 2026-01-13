@@ -16,7 +16,7 @@ class TokenChunker(TextChunker):
         overlap_tokens: Number of overlapping tokens.
 
     Example:
-        >>> from sage_rag import TokenChunker
+        >>> from sage_libs.sage_rag import TokenChunker
         >>> chunker = TokenChunker(max_tokens=100, overlap_tokens=20)
         >>> chunks = chunker.chunk("Long text here...")
     """

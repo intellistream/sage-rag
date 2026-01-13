@@ -16,7 +16,7 @@ class CrossEncoderReranker(Reranker):
         top_k: Number of results to return after reranking.
 
     Example:
-        >>> from sage_rag import CrossEncoderReranker
+        >>> from sage_libs.sage_rag import CrossEncoderReranker
         >>> reranker = CrossEncoderReranker(model=cross_encoder)
         >>> reranked = reranker.rerank("query", results)
     """

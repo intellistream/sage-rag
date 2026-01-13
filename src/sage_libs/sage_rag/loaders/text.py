@@ -13,7 +13,7 @@ class TextLoader(DocumentLoader):
         encoding: Text encoding (default: utf-8).
 
     Example:
-        >>> from sage_rag import TextLoader
+        >>> from sage_libs.sage_rag import TextLoader
         >>> loader = TextLoader()
         >>> doc = loader.load("document.txt")
         >>> print(doc.content)

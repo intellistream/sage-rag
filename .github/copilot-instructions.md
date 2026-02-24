@@ -6,6 +6,7 @@
 
 ## Critical rules
 - Keep package lightweight and modular; avoid unnecessary heavy dependencies.
+- Do not create new local virtual environments (`venv`/`.venv`); use the existing configured Python environment.
 - Preserve two usage modes: standalone usage and optional SAGE integration.
 - Maintain typed public APIs and clear docstrings.
 - Keep component registration logic coherent with `_register.py` and public exports in `__init__.py`.

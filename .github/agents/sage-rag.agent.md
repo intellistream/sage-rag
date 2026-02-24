@@ -12,6 +12,7 @@ tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo', '
 
 ## Rules
 - Keep package lightweight and modular.
+- Do not create new local virtual environments (`venv`/`.venv`); use the existing configured Python environment.
 - Preserve standalone mode and optional SAGE integration.
 - Maintain typed public APIs and clear docs/examples.
 - Keep registration/export flow coherent (`_register.py`, `__init__.py`).

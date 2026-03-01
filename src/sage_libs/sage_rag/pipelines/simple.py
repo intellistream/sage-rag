@@ -36,21 +36,29 @@ class SimpleRAGPipeline(RAGPipeline):
         >>> pipeline = SimpleRAGPipeline(
         ...     loader=TextLoader(),
         ...     chunker=SentenceChunker(),
-        ...     retriever=DenseRetriever(),
+        ...     retriever=DenseRetriever(embedding_model=embedding_model, vector_store=vector_store),
+        ...     generator=generator,
         ... )
-        >>> pipeline.index(["doc1.txt", "doc2.txt"])
+        >>> _ = pipeline.index_documents(["doc1.txt", "doc2.txt"])
         >>> response = pipeline.query("What is RAG?")
+        >>> print(response["answer"])
     """
 
     def __init__(
         self,
-        loader: DocumentLoader | None = None,
+        loader: DocumentLoader,
+        retriever: Retriever,
+        generator: Any,
         chunker: TextChunker | None = None,
-        retriever: Retriever | None = None,
         reranker: Reranker | None = None,
-        generator: Any = None,
         top_k: int = 5,
     ):
+        if loader is None:
+            raise ValueError("Loader required for pipeline initialization")
+        if retriever is None:
+            raise ValueError("Retriever required for pipeline initialization")
+        if generator is None:
+            raise ValueError("Generator required for pipeline initialization")
         self.loader = loader
         self.chunker = chunker
         self.retriever = retriever
@@ -66,14 +74,20 @@ class SimpleRAGPipeline(RAGPipeline):
             **config: Configuration options (loader, chunker, retriever, etc.)
         """
         if "loader" in config:
+            if config["loader"] is None:
+                raise ValueError("Loader cannot be None")
             self.loader = config["loader"]
         if "chunker" in config:
             self.chunker = config["chunker"]
         if "retriever" in config:
+            if config["retriever"] is None:
+                raise ValueError("Retriever cannot be None")
             self.retriever = config["retriever"]
         if "reranker" in config:
             self.reranker = config["reranker"]
         if "generator" in config:
+            if config["generator"] is None:
+                raise ValueError("Generator cannot be None")
             self.generator = config["generator"]
         if "top_k" in config:
             self.top_k = config["top_k"]
@@ -88,106 +102,41 @@ class SimpleRAGPipeline(RAGPipeline):
         Returns:
             Indexing statistics (num_docs, num_chunks, etc.)
         """
-        if self.loader is None or self.retriever is None:
-            raise ValueError("Loader and retriever required for indexing")
-
-        all_chunks = []
-        num_docs = 0
-
-        for source in sources:
-            # Load document
-            doc = self.loader.load(source, **kwargs)
-            num_docs += 1
-
-            # Chunk if chunker available
-            if self.chunker is not None:
-                chunks = self.chunker.chunk(doc.content, **kwargs)
-                for chunk in chunks:
-                    chunk_doc = Document(
-                        content=chunk.text,
-                        metadata={
-                            **doc.metadata,
-                            "chunk_index": chunk.metadata.get("chunk_index", 0),
-                            "start_pos": chunk.start_pos,
-                            "end_pos": chunk.end_pos,
-                        },
-                    )
-                    all_chunks.append(chunk_doc)
-            else:
-                all_chunks.append(doc)
-
-        # Index all chunks
-        self.retriever.index(all_chunks, **kwargs)
+        documents, num_docs = self._collect_documents(sources, **kwargs)
+        self.retriever.index(documents, **kwargs)
         self._indexed = True
 
         return {
             "num_docs": num_docs,
-            "num_chunks": len(all_chunks),
+            "num_chunks": len(documents),
             "indexed": True,
         }
 
-    def index(self, sources: list[str], **kwargs: Any) -> None:
-        """Index documents from sources.
-
-        Args:
-            sources: List of document sources (file paths, URLs, etc.).
-            **kwargs: Additional indexing parameters.
-        """
-        if self.loader is None or self.retriever is None:
-            raise ValueError("Loader and retriever required for indexing")
-
-        all_chunks = []
-
-        for source in sources:
-            # Load document
-            doc = self.loader.load(source, **kwargs)
-
-            # Chunk if chunker available
-            if self.chunker is not None:
-                chunks = self.chunker.chunk(doc.content, **kwargs)
-                for chunk in chunks:
-                    chunk_doc = Document(
-                        content=chunk.text,
-                        metadata={
-                            **doc.metadata,
-                            "chunk_index": chunk.metadata.get("chunk_index", 0),
-                            "start_pos": chunk.start_pos,
-                            "end_pos": chunk.end_pos,
-                        },
-                    )
-                    all_chunks.append(chunk_doc)
-            else:
-                all_chunks.append(doc)
-
-        # Index all chunks
-        self.retriever.index(all_chunks, **kwargs)
-        self._indexed = True
-
-    def query(self, question: str, top_k: int | None = None, **kwargs: Any) -> str:
+    def query(self, query: str, top_k: int = 5, **kwargs: Any) -> dict[str, Any]:
         """Query the RAG pipeline.
 
         Args:
-            question: User question.
+            query: User query.
             top_k: Number of contexts to retrieve.
             **kwargs: Additional parameters.
 
         Returns:
-            Generated response.
+            RAG response payload containing answer, sources, and metadata.
         """
-        k = top_k or self.top_k
-
-        # Retrieve relevant documents
-        results = self.retrieve(question, k, **kwargs)
-
-        # Build context from results
+        k = top_k
+        results = self.retrieve(query, k, **kwargs)
         context = self._build_context(results)
+        answer = self._generate_response(query, context)
 
-        # Generate response
-        if self.generator is not None:
-            return self._generate_response(question, context)
-
-        # Without generator, return context summary
-        return f"Retrieved {len(results)} relevant documents:\n\n{context}"
+        return {
+            "answer": answer,
+            "sources": [result.document for result in results],
+            "metadata": {
+                "top_k": k,
+                "num_results": len(results),
+                "indexed": self._indexed,
+            },
+        }
 
     def retrieve(
         self, query: str, top_k: int | None = None, **kwargs: Any
@@ -202,10 +151,7 @@ class SimpleRAGPipeline(RAGPipeline):
         Returns:
             List of retrieval results.
         """
-        if self.retriever is None:
-            return []
-
-        k = top_k or self.top_k
+        k = top_k if top_k is not None else self.top_k
         results = self.retriever.retrieve(query, top_k=k, **kwargs)
 
         # Rerank if reranker available
@@ -254,10 +200,34 @@ Question: {question}
 
 Answer:"""
 
-        # Call generator (assumed to have a generate or __call__ method)
-        if hasattr(self.generator, "generate"):
-            return self.generator.generate(prompt)
-        elif callable(self.generator):
-            return self.generator(prompt)
-        else:
-            return f"Generator not configured. Context:\n{context}"
+        generate_fn = getattr(self.generator, "generate", None)
+        if not callable(generate_fn):
+            raise TypeError("Generator must provide callable generate(prompt) method")
+
+        return generate_fn(prompt)
+
+    def _collect_documents(self, sources: list[str], **kwargs: Any) -> tuple[list[Document], int]:
+        """Load and chunk documents from sources."""
+        documents: list[Document] = []
+
+        for source in sources:
+            doc = self.loader.load(source, **kwargs)
+
+            if self.chunker is None:
+                documents.append(doc)
+                continue
+
+            chunks = self.chunker.chunk(doc.content, **kwargs)
+            for chunk in chunks:
+                chunk_doc = Document(
+                    content=chunk.text,
+                    metadata={
+                        **doc.metadata,
+                        "chunk_index": chunk.metadata.get("chunk_index", 0),
+                        "start_pos": chunk.start_pos,
+                        "end_pos": chunk.end_pos,
+                    },
+                )
+                documents.append(chunk_doc)
+
+        return documents, len(sources)

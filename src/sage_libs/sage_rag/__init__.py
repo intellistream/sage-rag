@@ -13,9 +13,14 @@ Usage:
 
     # Or via SAGE factory (after import triggers registration)
     import sage_rag  # triggers auto-registration
-    from sage.libs.rag.interface import create_loader, create_pipeline
+    from sage.libs.rag.interface import create_loader, create_retriever, create_pipeline
     loader = create_loader("text")
-    pipeline = create_pipeline("simple")
+    retriever = create_retriever(
+        "dense",
+        embedding_model=embedding_model,
+        vector_store=vector_store,
+    )
+    pipeline = create_pipeline("simple", loader=loader, retriever=retriever, generator=generator)
 
 Installation:
     pip install isage-rag
@@ -26,7 +31,7 @@ from . import _register  # noqa: F401
 from ._version import __author__, __email__, __version__
 from .chunkers import SentenceChunker, TokenChunker
 
-# Re-export main implementations for convenience
+# Public component exports
 from .loaders import MarkdownLoader, TextLoader
 from .pipelines import SimpleRAGPipeline
 from .rerankers import CrossEncoderReranker

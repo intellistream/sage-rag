@@ -6,6 +6,12 @@
 
 RAG (Retrieval-Augmented Generation) 组件库，提供文档加载、文本分块、检索和重排序功能。
 
+## 🧭 边界说明（L3）
+
+- 本仓库仅提供算法与接口实现（L3），不承载 middleware/service 绑定逻辑。
+- 禁止引入 `sage.middleware`、`sage.kernel`、`sage.platform` 依赖。
+- 采用 fail-fast：缺失依赖直接报错，不保留额外路径。
+
 ## 📦 安装
 
 ```bash
@@ -32,6 +38,8 @@ chunks = chunker.chunk(documents)
 - **Retrievers**: DenseRetriever
 - **Rerankers**: CrossEncoderReranker
 - **Pipelines**: SimpleRAGPipeline
+
+> `DenseRetriever` 需要显式提供 `vector_store` 与 `embedding_model` 后才能执行 `index/retrieve/delete_documents`。
 
 详细文档请查看 [docs/](docs/) 目录。
 

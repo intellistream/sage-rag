@@ -21,7 +21,9 @@ class CrossEncoderReranker(Reranker):
         >>> reranked = reranker.rerank("query", results)
     """
 
-    def __init__(self, model: Any = None, top_k: int | None = None):
+    def __init__(self, model: Any, top_k: int | None = None):
+        if model is None:
+            raise ValueError("CrossEncoderReranker requires a configured model")
         self.model = model
         self.top_k = top_k
 
@@ -47,12 +49,6 @@ class CrossEncoderReranker(Reranker):
             return []
 
         k = top_k or self.top_k or len(results)
-
-        if self.model is None:
-            # Without model, use keyword overlap as proxy
-            return self._keyword_rerank(query, results, k)
-
-        # Use cross-encoder model
         return self._model_rerank(query, results, k)
 
     def _model_rerank(
@@ -85,43 +81,6 @@ class CrossEncoderReranker(Reranker):
                 RetrievalResult(
                     document=result.document,
                     score=float(score),
-                    rank=rank,
-                )
-            )
-
-        return reranked
-
-    def _keyword_rerank(
-        self, query: str, results: list[RetrievalResult], top_k: int
-    ) -> list[RetrievalResult]:
-        """Simple keyword-based reranking.
-
-        Args:
-            query: Query string.
-            results: Results to rerank.
-            top_k: Number to return.
-
-        Returns:
-            Reranked results.
-        """
-        query_words = set(query.lower().split())
-
-        scored = []
-        for result in results:
-            doc_words = set(result.document.content.lower().split())
-            overlap = len(query_words & doc_words)
-            # Combine original score with keyword overlap
-            combined_score = result.score * 0.7 + overlap * 0.3 / max(len(query_words), 1)
-            scored.append((result, combined_score))
-
-        scored.sort(key=lambda x: x[1], reverse=True)
-
-        reranked = []
-        for rank, (result, score) in enumerate(scored[:top_k], 1):
-            reranked.append(
-                RetrievalResult(
-                    document=result.document,
-                    score=score,
                     rank=rank,
                 )
             )

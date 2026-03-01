@@ -11,9 +11,9 @@ Issue `intellistream/sage-rag#3` requires that `sage-rag` stays as a pure L3 pac
 Audit findings:
 
 - No direct imports from `sage.middleware`, `sage.kernel`, or `sage.platform` in `src/sage_libs/sage_rag`.
-- `DenseRetriever` previously contained an in-memory path when `vector_store` was not configured.
+- `DenseRetriever` previously contained a silent in-memory fallback path when `vector_store` was not configured.
 
-That path hid missing dependency wiring and violated the fail-fast constraint from the parent boundary refactor issue.
+This fallback hides missing dependency wiring and violates the fail-fast constraint from the parent boundary refactor issue.
 
 ## Decision
 
@@ -23,7 +23,7 @@ That path hid missing dependency wiring and violated the fail-fast constraint fr
    - embedding generation now requires `embedding_model`.
 3. Add regression tests to guard:
    - forbidden cross-layer imports are absent,
-   - `DenseRetriever` fails fast when required dependencies are missing.
+   - `DenseRetriever` no longer silently falls back.
 
 ## Consequences
 

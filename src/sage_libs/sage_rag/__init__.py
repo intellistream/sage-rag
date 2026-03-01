@@ -13,14 +13,9 @@ Usage:
 
     # Or via SAGE factory (after import triggers registration)
     import sage_rag  # triggers auto-registration
-    from sage.libs.rag.interface import create_loader, create_retriever, create_pipeline
+    from sage.libs.rag.interface import create_loader, create_pipeline
     loader = create_loader("text")
-    retriever = create_retriever(
-        "dense",
-        embedding_model=embedding_model,
-        vector_store=vector_store,
-    )
-    pipeline = create_pipeline("simple", loader=loader, retriever=retriever, generator=generator)
+    pipeline = create_pipeline("simple")
 
 Installation:
     pip install isage-rag

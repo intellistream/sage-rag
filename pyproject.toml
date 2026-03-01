@@ -9,9 +9,7 @@ description = "SAGE RAG Framework - Document loaders, chunkers, retrievers for R
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-authors = [
-    { name = "IntelliStream Team", email = "shuhao_zhang@hust.edu.cn" }
-]
+authors = [{ name = "IntelliStream Team", email = "shuhao_zhang@hust.edu.cn" }]
 keywords = [
     "RAG",
     "retrieval",
@@ -29,15 +27,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-full = []
-
-dev = [
-    # dev includes [full] — no need for a separate extras install
-    "isage-rag[full]",
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
-    "ruff>=0.4.0",
-]
+dev = ["pytest>=7.0.0", "pytest-asyncio>=0.21.0", "ruff>=0.4.0"]
 
 [project.urls]
 "Homepage" = "https://github.com/intellistream/sage-rag"

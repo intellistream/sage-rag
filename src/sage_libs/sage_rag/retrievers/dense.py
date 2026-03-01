@@ -21,14 +21,10 @@ class DenseRetriever(Retriever):
 
     def __init__(
         self,
-        embedding_model: Any,
-        vector_store: Any,
+        embedding_model: Any = None,
+        vector_store: Any = None,
         top_k: int = 5,
     ):
-        if embedding_model is None:
-            raise ValueError("DenseRetriever requires a configured embedding_model")
-        if vector_store is None:
-            raise ValueError("DenseRetriever requires a configured vector_store")
         self.embedding_model = embedding_model
         self.vector_store = vector_store
         self.top_k = top_k
@@ -46,6 +42,9 @@ class DenseRetriever(Retriever):
         Returns:
             List of retrieval results with scores.
         """
+        if self.vector_store is None:
+            raise ValueError("DenseRetriever requires a configured vector_store")
+
         k = top_k or self.top_k
         return self._retrieve_from_store(query, k, **kwargs)
 
@@ -56,6 +55,9 @@ class DenseRetriever(Retriever):
             documents: Documents to index.
             **kwargs: Indexing parameters.
         """
+        if self.vector_store is None:
+            raise ValueError("DenseRetriever requires a configured vector_store")
+
         for doc in documents:
             embedding = self._get_embedding(doc.content)
             self.vector_store.add(embedding, metadata={"content": doc.content, **doc.metadata})
@@ -75,6 +77,9 @@ class DenseRetriever(Retriever):
         Args:
             doc_ids: List of document IDs to delete
         """
+        if self.vector_store is None:
+            raise ValueError("DenseRetriever requires a configured vector_store")
+
         for doc_id in doc_ids:
             self.vector_store.delete(doc_id)
 
@@ -111,6 +116,8 @@ class DenseRetriever(Retriever):
         Returns:
             Embedding vector.
         """
+        if self.embedding_model is None:
+            raise ValueError("DenseRetriever requires a configured embedding_model")
+
         # Use embedding model
         return self.embedding_model.encode(text).tolist()
-

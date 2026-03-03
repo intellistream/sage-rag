@@ -1,8 +1,8 @@
 """SAGE RAG - Retrieval-Augmented Generation implementations.
 
 This package provides concrete implementations for:
-- Document Loaders (TextLoader, PDFLoader, MarkdownLoader)
-- Text Chunkers (SentenceChunker, TokenChunker)
+- Document Loaders (TextLoader, PDFLoader, DocxLoader, DocLoader, MarkdownLoader)
+- Text Chunkers (CharacterChunker, SentenceChunker, TokenChunker, TransformerTokenChunker)
 - Retrievers (DenseRetriever, SparseRetriever)
 - Rerankers (CrossEncoderReranker)
 - RAG Pipelines (SimpleRAGPipeline)
@@ -24,10 +24,10 @@ Installation:
 # Auto-register implementations to SAGE interface
 from . import _register  # noqa: F401
 from ._version import __author__, __email__, __version__
-from .chunkers import SentenceChunker, TokenChunker
+from .chunkers import CharacterChunker, SentenceChunker, TokenChunker, TransformerTokenChunker
 
 # Public component exports
-from .loaders import MarkdownLoader, TextLoader
+from .loaders import DocLoader, DocxLoader, LoaderFactory, MarkdownLoader, PDFLoader, TextLoader
 from .pipelines import SimpleRAGPipeline
 from .rerankers import CrossEncoderReranker
 from .retrievers import DenseRetriever
@@ -40,9 +40,15 @@ __all__ = [
     # Loaders
     "TextLoader",
     "MarkdownLoader",
+    "PDFLoader",
+    "DocxLoader",
+    "DocLoader",
+    "LoaderFactory",
     # Chunkers
+    "CharacterChunker",
     "SentenceChunker",
     "TokenChunker",
+    "TransformerTokenChunker",
     # Retrievers
     "DenseRetriever",
     # Rerankers

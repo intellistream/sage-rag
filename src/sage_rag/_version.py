@@ -1,5 +1,5 @@
-"""Version information for sage_rag package."""
+"""Version information for sage-rag."""
 
-from sage_libs.sage_rag._version import __author__, __email__, __version__
-
-__all__ = ["__version__", "__author__", "__email__"]
+__version__ = "0.3.0"
+__author__ = "IntelliStream Team"
+__email__ = "shuhao_zhang@hust.edu.cn"

@@ -1,58 +1,23 @@
-"""SAGE RAG - Retrieval-Augmented Generation implementations.
+"""Deprecated namespace shim — use :mod:`sage_rag` directly.
 
-This package provides concrete implementations for:
-- Document Loaders (TextLoader, PDFLoader, DocxLoader, DocLoader, MarkdownLoader)
-- Text Chunkers (CharacterChunker, SentenceChunker, TokenChunker, TransformerTokenChunker)
-- Retrievers (DenseRetriever, SparseRetriever)
-- Rerankers (CrossEncoderReranker)
-- RAG Pipelines (SimpleRAGPipeline)
+This ``sage_libs.sage_rag`` path will be removed in a future release.
+Please update your imports::
 
-Usage:
-    # Direct import
-    from sage_libs.sage_rag import TextLoader, SimpleRAGPipeline
+    # Old (deprecated)
+    from sage_libs.sage_rag import TextLoader
 
-    # Or via SAGE factory (after import triggers registration)
-    import sage_rag  # triggers auto-registration
-    from sage.libs.rag.interface import create_loader, create_pipeline
-    loader = create_loader("text")
-    pipeline = create_pipeline("simple")
-
-Installation:
-    pip install isage-rag
+    # New
+    from sage_rag import TextLoader
+    # or: pip install isage-rag
 """
 
-# Auto-register implementations to SAGE interface
-from . import _register  # noqa: F401
-from ._version import __author__, __email__, __version__
-from .chunkers import CharacterChunker, SentenceChunker, TokenChunker, TransformerTokenChunker
+import warnings
 
-# Public component exports
-from .loaders import DocLoader, DocxLoader, LoaderFactory, MarkdownLoader, PDFLoader, TextLoader
-from .pipelines import SimpleRAGPipeline
-from .rerankers import CrossEncoderReranker
-from .retrievers import DenseRetriever
+warnings.warn(
+    "sage_libs.sage_rag is deprecated. Import from sage_rag instead: pip install isage-rag",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
-__all__ = [
-    # Version info
-    "__version__",
-    "__author__",
-    "__email__",
-    # Loaders
-    "TextLoader",
-    "MarkdownLoader",
-    "PDFLoader",
-    "DocxLoader",
-    "DocLoader",
-    "LoaderFactory",
-    # Chunkers
-    "CharacterChunker",
-    "SentenceChunker",
-    "TokenChunker",
-    "TransformerTokenChunker",
-    # Retrievers
-    "DenseRetriever",
-    # Rerankers
-    "CrossEncoderReranker",
-    # Pipelines
-    "SimpleRAGPipeline",
-]
+from sage_rag import *  # noqa: F401, F403, E402
+from sage_rag import __all__  # noqa: F401, E402

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "isage-rag"
-version = "0.1.0.7"
+version = "0.3.0"
 description = "SAGE RAG Framework - Document loaders, chunkers, retrievers for RAG pipelines"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -23,11 +23,14 @@ keywords = [
 dependencies = [
     "pydantic>=2.0.0",
     "typing-extensions>=4.0.0",
-    "isage-libs>=0.2.4.22",
 ]
 
 [project.optional-dependencies]
-full = []
+# Vector store backends
+chroma = ["chromadb>=0.4.0"]
+milvus = ["pymilvus>=2.3.0"]
+backends = ["isage-rag[chroma,milvus]"]
+full = ["isage-rag[backends]"]
 dev = ["isage-rag[full]", "pytest>=7.0.0", "pytest-asyncio>=0.21.0", "ruff>=0.4.0"]
 
 [project.urls]
@@ -36,7 +39,7 @@ dev = ["isage-rag[full]", "pytest>=7.0.0", "pytest-asyncio>=0.21.0", "ruff>=0.4.
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["sage_libs*", "sage_rag*"]
+include = ["sage_rag*"]
 
 [tool.setuptools.package-dir]
 "" = "src"

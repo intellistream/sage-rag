@@ -1,0 +1,40 @@
+"""Auto-register implementations to SAGE interface (optional integration).
+
+When sage-libs is installed, registers all implementations with the SAGE RAG
+interface factory.  Without sage-libs the package works fully standalone.
+"""
+
+from .chunkers import SentenceChunker, TokenChunker
+from .loaders import MarkdownLoader, TextLoader
+from .pipelines import SimpleRAGPipeline
+from .rerankers import CrossEncoderReranker
+from .retrievers import DenseRetriever
+
+try:
+    from sage.libs.rag.interface import (
+        register_chunker,
+        register_loader,
+        register_pipeline,
+        register_reranker,
+        register_retriever,
+    )
+
+    # ==================== Register Loaders ====================
+    register_loader("text", TextLoader)
+    register_loader("markdown", MarkdownLoader)
+
+    # ==================== Register Chunkers ====================
+    register_chunker("sentence", SentenceChunker)
+    register_chunker("token", TokenChunker)
+
+    # ==================== Register Retrievers ====================
+    register_retriever("dense", DenseRetriever)
+
+    # ==================== Register Rerankers ====================
+    register_reranker("cross_encoder", CrossEncoderReranker)
+
+    # ==================== Register Pipelines ====================
+    register_pipeline("simple", SimpleRAGPipeline)
+
+except ImportError:
+    pass  # sage-libs not installed; running standalone

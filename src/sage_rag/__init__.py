@@ -11,6 +11,7 @@ Install::
 
 # Trigger optional registration with sage-libs factory if installed
 from . import _register  # noqa: F401
+from . import operators  # noqa: F401
 from ._version import __author__, __email__, __version__
 from .chunkers import CharacterChunker, SentenceChunker, TokenChunker, TransformerTokenChunker
 from .loaders import DocLoader, DocxLoader, LoaderFactory, MarkdownLoader, PDFLoader, TextLoader
@@ -35,4 +36,5 @@ __all__ = [
     "DenseRetriever",
     "CrossEncoderReranker",
     "SimpleRAGPipeline",
+    "operators",
 ]

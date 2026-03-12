@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from sage.libs.rag.interface import (
+from sage_rag.interface import (
     Document,
     DocumentLoader,
     RAGPipeline,

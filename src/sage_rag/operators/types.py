@@ -1,9 +1,6 @@
-"""RAG type definitions.
+"""RAG type definitions."""
 
-Re-exports canonical types from ``sage.libs.rag.types``.
-"""
-
-from sage.libs.rag.types import (  # noqa: F401
+from sage_rag.types import (  # noqa: F401
     RAGDocument,
     RAGInput,
     RAGOutput,

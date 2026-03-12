@@ -1,9 +1,6 @@
-"""RAG document loaders.
+"""RAG document loaders."""
 
-Re-exports loader implementations from ``sage.libs.rag.document_loaders``.
-"""
-
-from sage.libs.rag.document_loaders import (  # noqa: F401
+from sage_rag.loaders import (  # noqa: F401
     DocLoader,
     DocxLoader,
     LoaderFactory,

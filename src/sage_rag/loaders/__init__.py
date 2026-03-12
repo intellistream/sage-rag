@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any
 
-from sage.libs.rag.interface import Document
+from sage_rag.interface import Document
 
 from .markdown import MarkdownLoader
 from .pdf import PDFLoader

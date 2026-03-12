@@ -13,12 +13,12 @@ This module contains domain-specific operators for RAG applications:
 - Document processing operators (chunking, refining, writing)
 - External data source operators (ArXiv)
 
-These operators inherit from base operator classes in sage.common/sage.kernel
+These operators inherit from the current SAGE base operator classes when needed
 and implement RAG-specific business logic.
 """
 
 # Export types for easier access
-from sage.libs.rag.types import (
+from sage_rag.types import (
     RAGDocument,
     RAGInput,
     RAGOutput,
@@ -37,12 +37,12 @@ _IMPORTS = {
     "Query_Profiler": ("sage_rag.operators.profiler", "Query_Profiler"),
     "QueryProfilerResult": ("sage_rag.operators.profiler", "QueryProfilerResult"),
     # Document Loaders
-    "TextLoader": ("sage.libs.rag.document_loaders", "TextLoader"),
-    "PDFLoader": ("sage.libs.rag.document_loaders", "PDFLoader"),
-    "DocxLoader": ("sage.libs.rag.document_loaders", "DocxLoader"),
-    "DocLoader": ("sage.libs.rag.document_loaders", "DocLoader"),
-    "MarkdownLoader": ("sage.libs.rag.document_loaders", "MarkdownLoader"),
-    "LoaderFactory": ("sage.libs.rag.document_loaders", "LoaderFactory"),
+    "TextLoader": ("sage_rag.operators.document_loaders", "TextLoader"),
+    "PDFLoader": ("sage_rag.operators.document_loaders", "PDFLoader"),
+    "DocxLoader": ("sage_rag.operators.document_loaders", "DocxLoader"),
+    "DocLoader": ("sage_rag.operators.document_loaders", "DocLoader"),
+    "MarkdownLoader": ("sage_rag.operators.document_loaders", "MarkdownLoader"),
+    "LoaderFactory": ("sage_rag.operators.document_loaders", "LoaderFactory"),
     # Generators
     "OpenAIGenerator": ("sage_rag.operators.generator", "OpenAIGenerator"),
     "HFGenerator": ("sage_rag.operators.generator", "HFGenerator"),
@@ -72,7 +72,7 @@ _IMPORTS = {
     "ContextRecallEvaluate": ("sage_rag.operators.evaluate", "ContextRecallEvaluate"),
     "CompressionRateEvaluate": ("sage_rag.operators.evaluate", "CompressionRateEvaluate"),
     # Document Processing
-    "CharacterSplitter": ("sage.libs.rag.chunk", "CharacterSplitter"),
+    "CharacterSplitter": ("sage_rag.operators.chunk", "CharacterSplitter"),
     "RefinerOperator": ("sage_rag.operators.refiner", "RefinerOperator"),
     "MemoryWriter": ("sage_rag.operators.writer", "MemoryWriter"),
     # External Data Sources (may require optional dependencies)

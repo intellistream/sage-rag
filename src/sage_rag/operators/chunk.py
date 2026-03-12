@@ -1,10 +1,5 @@
-"""RAG chunking operators.
+"""RAG chunking operators."""
 
-Re-exports ``CharacterSplitter`` from ``sage.libs.rag.chunk``.
-"""
-
-from sage.libs.rag.chunk import (  # noqa: F401
-    CharacterSplitter,
-)
+from sage_rag.chunkers import CharacterChunker as CharacterSplitter  # noqa: F401
 
 __all__ = ["CharacterSplitter"]

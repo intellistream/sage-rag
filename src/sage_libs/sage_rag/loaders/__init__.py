@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any
 
-from sage.libs.rag.interface import Document
+from sage_rag.interface import Document
 
 from .markdown import MarkdownLoader
 from .pdf import PDFLoader
@@ -50,8 +50,7 @@ class LoaderFactory:
         loader_cls = cls._loader_map.get(ext)
         if loader_cls is None:
             raise ValueError(
-                f"Unsupported file extension: {ext!r}. "
-                f"Supported: {sorted(cls._loader_map)}"
+                f"Unsupported file extension: {ext!r}. Supported: {sorted(cls._loader_map)}"
             )
         return loader_cls().load(filepath, **kwargs)
 

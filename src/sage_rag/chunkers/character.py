@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from sage.libs.rag.interface import Chunk, Document, TextChunker
+from sage_rag.interface import Chunk, Document, TextChunker
 
 
 class CharacterChunker(TextChunker):

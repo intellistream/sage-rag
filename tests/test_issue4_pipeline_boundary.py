@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from sage.libs.rag.interface import Document, RetrievalResult
+from sage_rag.interface import Document, RetrievalResult
 from sage_libs.sage_rag.pipelines.simple import SimpleRAGPipeline
 
 

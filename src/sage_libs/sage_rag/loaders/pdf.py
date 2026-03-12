@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from sage.libs.rag.interface import Document, DocumentLoader
+from sage_rag.interface import Document, DocumentLoader
 
 
 class PDFLoader(DocumentLoader):

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
-from sage.libs.rag.interface import Document, RetrievalResult
+from sage_rag.interface import Document, RetrievalResult
 from sage_libs.sage_rag import CrossEncoderReranker, DenseRetriever
 
 
@@ -22,7 +22,9 @@ class _MockCrossEncoder:
 class _MockEmbedding:
     def encode(self, text: str) -> _MockVector:
         tokens = text.lower().split()
-        return _MockVector([float("weather" in tokens), float("forecast" in tokens), float(len(tokens))])
+        return _MockVector(
+            [float("weather" in tokens), float("forecast" in tokens), float(len(tokens))]
+        )
 
 
 class _MockVector:

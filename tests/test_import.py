@@ -4,10 +4,11 @@
 
 def test_import_package():
     """Test that package can be imported."""
-    from sage_libs import sage_rag
+    import sage_rag
+    from sage_rag._version import __version__ as pkg_version
 
     assert hasattr(sage_rag, "__version__")
-    assert sage_rag.__version__ == "0.0.0.1"
+    assert sage_rag.__version__ == pkg_version
 
 
 def test_import_version():

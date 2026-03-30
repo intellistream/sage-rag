@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from sage.libs.rag.interface import Chunk, Document, TextChunker
+from sage_libs.sage_rag.interface import Chunk, Document, TextChunker
 
 
 class TokenChunker(TextChunker):

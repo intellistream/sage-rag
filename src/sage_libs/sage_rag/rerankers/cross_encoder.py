@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from sage.libs.rag.interface import Reranker, RetrievalResult
+from sage_libs.sage_rag.interface import Reranker, RetrievalResult
 
 
 class CrossEncoderReranker(Reranker):

@@ -1,10 +1,6 @@
-"""Auto-register implementations to SAGE interface.
+"""Auto-register implementations to the local RAG interface registry."""
 
-This module is imported in __init__.py to register all implementations
-with the SAGE RAG interface factory.
-"""
-
-from sage.libs.rag.interface import (
+from sage_libs.sage_rag.interface import (
     register_chunker,
     register_loader,
     register_pipeline,
@@ -18,19 +14,13 @@ from .pipelines import SimpleRAGPipeline
 from .rerankers import CrossEncoderReranker
 from .retrievers import DenseRetriever
 
-# ==================== Register Loaders ====================
+# Register implementations in local registry.
 register_loader("text", TextLoader)
 register_loader("markdown", MarkdownLoader)
 
-# ==================== Register Chunkers ====================
 register_chunker("sentence", SentenceChunker)
 register_chunker("token", TokenChunker)
 
-# ==================== Register Retrievers ====================
 register_retriever("dense", DenseRetriever)
-
-# ==================== Register Rerankers ====================
 register_reranker("cross_encoder", CrossEncoderReranker)
-
-# ==================== Register Pipelines ====================
 register_pipeline("simple", SimpleRAGPipeline)
